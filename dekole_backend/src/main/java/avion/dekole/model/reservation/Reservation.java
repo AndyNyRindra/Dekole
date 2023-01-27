@@ -24,4 +24,5 @@ public class Reservation extends BaseModel {
 
     @OneToMany(mappedBy = "reservationId")
     private List<ReservationDetails> details;
+
 }

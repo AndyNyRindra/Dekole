@@ -22,4 +22,8 @@ public class AirplaneClass extends BaseModel {
     private Integer beginLine;
     private Integer endLine;
 
+    public Integer getSeats() {
+        return (getEndLine() - getBeginLine() + 1) * airplane.getColumns();
+    }
+
 }

@@ -21,4 +21,7 @@ public class FlightPrice extends BaseModel {
     private AirplaneClass airplaneClass;
 
     private Double price;
+
+    @OneToOne(mappedBy = "flightPriceId")
+    private Promotion promotion;
 }
