@@ -2,12 +2,15 @@ package avion.dekole.model.flight;
 
 import avion.dekole.model.airplane.AirplaneClass;
 import avion.dekole.model.common.BaseModel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +25,18 @@ public class FlightPrice extends BaseModel {
 
     private Double price;
 
-    @OneToOne(mappedBy = "flightPriceId")
-    private Promotion promotion;
+    @OneToMany(mappedBy = "flightPriceId")
+    private List<Promotion> promotions;
+
+    public Double getDiscountedPrice() {
+        Instant instant = LocalDateTime.now().toInstant(ZoneOffset.UTC);
+        Date now = Date.from(instant);
+        for (Promotion promotion : getPromotions()) {
+            if (promotion.getBeginDate().before(now) && promotion.getEndDate().after(now)) {
+                return getPrice() - (getPrice() * promotion.getDiscount());
+            }
+        }
+        return getPrice();
+    }
+
 }
